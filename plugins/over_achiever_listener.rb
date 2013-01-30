@@ -9,7 +9,7 @@ class OverAchieverListener
 
   def listen(m)
     if matches = m.message.match(/^achieve: (\d*)(\D.*)/)
-      points = matches[1].empty? 5 : matches[1]
+      points = matches[1].empty? ? 5 : matches[1]
       msg = matches[2].strip
       if badge = OverAchiever.generate_badge(points, msg)
         m.reply badge.gsub('{{user}}', m.user.nick)
