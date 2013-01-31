@@ -6,31 +6,20 @@ A community built chat bot, just for fun. Send pull requests!
 
 It runs with straight Ruby. You'll need the Cinch and Cinch-Identify gems and Ruby 1.9, and you'll want to specify the nick and channel you want to use in a YAML file:
 
-  bot.yml
+bot.yml::
   settings:
-    nick: my_bot
-    channel: ecruby
-    nickserv_pass: sekrit
+    server: 'irc.freenode.org'
+    nick: &nick 'my_bot'
+    channel: '#ecruby'
+    plugins:
+      "Repeater":
+      "OverAchieverListener":
+      "Cinch::Plugins::Identify":
+        require: 'cinch/plugins/identify'
+        nick: *nick
+        nickserv_pass: sekrit
+        type: nickserv
 
-If you plan to use the Karma plugin, you'll need a bit more:
-
-  bot.yml
-  settings:
-    nick: my_bot
-    channel: ecruby
-    nickserv_pass: sekrit
-    persistence_url: ecruby.org
-    username: some_user
-    password: sekrit
-
-Then just run it with
+Then just run it with:
 
   ruby chatbot.rb
-  
-
-== Things we can do
-
-* More games
-* Database persistence
-* Record links to Tumblr?
-* Whatever else sounds like fun

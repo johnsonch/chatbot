@@ -1,38 +1,27 @@
 require 'rubygems'
 require 'cinch'
-require 'cinch/plugins/identify'
 require 'yaml'
+require './helpers'
 
-begin
-  $settings = YAML.load(File.read("bot.yml"))
-rescue
-  puts "create bot.yml and populate it with values. See the readme file!"
-end
+raise "create bot.yml and populate it with values. See the readme file!" unless File.exists?("bot.yml")
 
-$help_messages = []
+initialize_globals!
+cinch_plugins = include_plugins($settings["settings"]['plugins'])
 
-require './plugins/karma'
-require './plugins/link_catcher'
-require './plugins/repeater'
-
-@irc  = Cinch::Bot.new do
-  
+@irc = Cinch::Bot.new do
   configure do |c|
-    c.server = "irc.freenode.org"
-    c.nick = $settings["settings"]["nick"]
-    c.channels = [$settings["settings"]["channel"]]
-    c.plugins.plugins = [Karma, LinkCatcher, Repeater, Cinch::Plugins::Identify]
-    c.plugins.options[Cinch::Plugins::Identify] = {
-      :username => $settings['settings']['nick'],
-      :password => $settings['settings']['nickserv_pass'],
-      :type     => :nickserv
-    }
+    c.server          = $settings["settings"]["server"]
+    c.nick            = $settings["settings"]["nick"]
+    c.channels        = [$settings["settings"]["channel"]]
+    c.plugins.plugins = cinch_plugins.keys
+    cinch_plugins.each do |plugin_class, options|
+      c.plugins.options[plugin_class] = options
+    end
   end
-
+  
   on :message, /^!help/ do |m|
-    $help_messages.each{|message| m.user.send message }
+    $help_messages.each{ |message| m.user.send message }
   end
-
 end
 
 @irc.start
