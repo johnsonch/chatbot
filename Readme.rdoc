@@ -4,9 +4,9 @@ A community built chat bot, just for fun. Send pull requests!
 
 === Running it
 
-It runs with straight Ruby. You'll need the Cinch and Cinch-Identify gems and Ruby 1.9, and you'll want to specify the nick and channel you want to use in a YAML file:
+It runs with straight Ruby. You'll need the Cinch, Cinch-Identify and ActiveSupport gems and Ruby 1.9, and you'll want to specify the nick and channel you want to use in a YAML file:
 
-bot.yml::
+[bot.yml]:
   settings:
     server: 'irc.freenode.org'
     nick: &nick 'my_bot'
